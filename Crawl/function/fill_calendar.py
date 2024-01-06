@@ -40,3 +40,26 @@ def find_from_date_vs_to_date(date_now) -> Tuple[str]:
         date_of_from_date =date_of_to_date.replace(day=1)
     return date_of_from_date, date_of_to_date
 
+def fill_date(id: str, input_date, edge) -> None:
+    """
+    Fill to calendar with date in type text
+    
+    Args:
+        id: str
+            id of date field
+        fill_date: str
+            date to fill, architecture "%d%m%Y"
+
+    Returns:
+        None
+    """    
+    # time.sleep(1)
+    try:
+        WebDriverWait(edge, 20).until(
+            EC.presence_of_element_located((By.ID, id))
+        )
+    finally:
+        edit_date = edge.find_element(By.ID, id)
+        edit_date.send_keys(datetime.strftime(input_date,'%d%m%Y'))
+        edit_date.send_keys(Keys.ESCAPE)
+        edit_date.send_keys(datetime.strftime(input_date, '%d%m%Y'))
