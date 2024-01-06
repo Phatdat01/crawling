@@ -12,6 +12,40 @@ from Crawl.function.download_process import download_to_local, move_location
 from Crawl.function.fill_form import multi_check, scroll_select, filter_region, click_with_list
 from Crawl.function.fill_calendar import find_from_date_vs_to_date, fill_date, calculate_month_vs_year
 
+
+def fill_kc(region: str, downloads_path: str, date_now, add_text: str, source_name_list: List[str], edge) -> None:
+    time.sleep(1.7)
+    while True:
+        try:
+            time.sleep(1)
+            text_of_date = datetime.strftime(date_now, "%Y%m%d")
+            date_of_from_date, date_of_to_date = find_from_date_vs_to_date(date_now = date_now)
+            if region == "GT" and date_of_to_date.day == 15:
+                date_of_to_date = date_of_to_date - timedelta(days = 1)
+            fill_date(id="pag_RPT_Filter_grd_RPT_ctl02_Control_dat_Value",input_date=date_of_from_date, edge=edge)
+            # fill to date
+            fill_date(id="pag_RPT_Filter_grd_RPT_ctl03_Control_dat_Value",input_date=date_of_to_date, edge=edge)
+            time.sleep(1)
+            click_button(id = "pag_RPT_Filter_grd_RPT_ctl04_Control_drp_Value_ms", edge = edge)
+            if region:
+                time.sleep(1)
+                click_with_list(lst_of_click = edge.find_elements(By.CLASS_NAME, "ui-multiselect-none"), edge = edge)
+                time.sleep(1)
+                filter_region(value = region, edge = edge)
+            time.sleep(2)
+            multi_check(edge = edge)
+            time.sleep(2)
+            click_button(id="pag_RPT_Filter_grd_RPT_ctl05_Control_drp_Value_ms", edge = edge)
+            multi_check(edge = edge)
+            time.sleep(1)
+            scroll_select(
+                id = "pag_RPT_Filter_grd_RPT_ctl07_Control_drp_Value",
+                select_value = "Confirmed",
+                edge = edge
+            )
+            click_button(id = "pag_RPT_Filter_btn_Generate_Report_Value", edge = edge)
+            ## Download file
+
 ## Open main Web
 def open_web(url: str, edge) -> None:
     """
