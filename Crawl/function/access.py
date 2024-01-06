@@ -97,3 +97,63 @@ def change_user_account(account: str, edge) -> None:
             break
         except:
             pass
+
+def find_index_by_text(text_value: str, edge) -> str:
+    """
+    select search button on a row that having text needed
+    
+    Args:
+        text_value: str
+            name of row
+
+    Returns:
+        None
+    """
+    time.sleep(1.7)
+    run_time=0
+    while True:
+        try:
+            time.sleep(0.5)
+            run_time += 0.5
+            index_select = edge.find_element(By.XPATH, f"//span[contains(text(), '{text_value}')]")
+            row_no = re.findall(r'\d+', index_select.get_attribute("id"))[0]
+            break
+        except:
+            if run_time > 2:
+                row_no = None
+                break
+            pass
+    return row_no
+
+def access_to_report(child_1: str, child_2: str, child_3: str, edge) -> None:
+    """
+    Download file to local
+    
+    Args:
+      child_1: str
+        navigation child 1 in report menu
+      child_2: str
+        navigation child of child 1
+      child_3: str
+        navigation child of child 2
+
+    Returns:
+      None
+    """
+    time.sleep(1.7)
+    while True:
+        try:
+            time.sleep(2.7)
+            edge.find_element(By.ID, f"{child_1}").click()
+            edge.find_element(By.ID, f"{child_2}").click()
+            edge.find_element(By.ID, f"{child_3}").click()
+            break
+        except:
+            try:
+                child_1_1 = edge.find_element(By.ID, f"{child_1}")
+                child_1_2 = child_1_1.find_element(By.ID, f"{child_1}")
+                child_1_2.find_element(By.ID, f"{child_1}").click()
+                child_1_2.find_element(By.ID, f"{child_2}").click()
+                child_1_2.find_element(By.ID, f"{child_3}").click()
+            except:
+                pass
