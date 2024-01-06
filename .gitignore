@@ -1,0 +1,17 @@
+logs/
+target/
+result/
+source/
+dbt_modules/
+virtual_env/
+
+credentials.json
+main.spec
+
+dist
+build
+__pycache__
+GUI/__pycache__
+Crawl/__pycache__
+Crawl/round/__pycache__
+Crawl/function/__pycache__
