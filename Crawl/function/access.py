@@ -57,6 +57,51 @@ def fill_kc(region: str, downloads_path: str, date_now, add_text: str, source_na
             break
         except:
             pass
+        
+# For round 5
+def kc_total(downloads_path: str, date_now, region_list: List[str], edge) -> None:
+    """
+    For work with OPI section, but still nothing
+    
+    Args:
+        downloads_path: str
+            link the the save when download
+        text_of_date: str
+            use for find folder move to
+        file_name: str
+            file name architecture
+        region_list: List[str]
+            region name list of file
+    Returns:
+        None
+    """
+
+    time.sleep(1.7)
+    source_name_list = ["VN08_DIST_PROMOTION"]
+    row_no = find_index_by_text(text_value = "Khuyến mãi Nhà Phân Phối (Promotion)", edge = edge)
+    click_button(
+                id = f"pag_RPT_Overview_grd_ReportList_ctl{row_no}_btn_GoToReport_Value", 
+                edge = edge
+            )
+    if region_list == []:
+        fill_kc(
+            region = "", 
+            downloads_path = downloads_path, 
+            add_text = "", 
+            date_now = date_now,
+            source_name_list = source_name_list, 
+            edge = edge
+        )
+    else:
+        for region in region_list:
+            fill_kc(
+                region = region, 
+                downloads_path = downloads_path, 
+                add_text = f"_R3_", 
+                date_now = date_now,
+                source_name_list = source_name_list, 
+                edge = edge
+            )
 
 ## Open main Web
 def open_web(url: str, edge) -> None:
