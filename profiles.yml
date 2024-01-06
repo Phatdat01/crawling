@@ -1,0 +1,7 @@
+default-hihi:
+  outputs: 
+   dev:
+     type: duckdb
+     #path: memory
+     path: 'database/data.duckdb'
+  target: dev
