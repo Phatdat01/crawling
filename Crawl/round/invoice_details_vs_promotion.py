@@ -14,6 +14,25 @@ from Crawl.function.fill_calendar import fill_date, find_from_date_vs_to_date
 from Crawl.function.access import access_to_report, access_hdr_sec, kc_total, fix_navigation
 
 
+def access_invoice_dtl(downloads_path: str, text_of_date: str, edge) -> None:
+    time.sleep(1)
+    access_hdr_sec(text_value = "EXP_AR_INVOICE_DTL", edge=edge)
+    # status
+    time.sleep(2)
+    scroll_select(id="pag_FW_SYS_INTF_JOB_DTL_PopupNew_FILE_TYPE_Value",select_value="D - Delimited", edge=edge)
+    click_button(id = "pag_FW_SYS_INTF_JOB_DTL_PopupNew_FLD_SEPARATOR_STD_Value_0", edge = edge)
+    time.sleep(1)
+    scroll_select(
+        id = "pag_FW_SYS_INTF_JOB_DTL_PopupNew_grd_DynamicFilter_ctl13_dyn_Field_drp_Value",
+        select_value = "Invoiced",
+        edge=edge
+    )
+    date_now = datetime.now()
+    date_of_from_date, date_of_to_date = find_from_date_vs_to_date(date_now=date_now)
+    fill_date(id="pag_FW_SYS_INTF_JOB_DTL_PopupNew_grd_DynamicFilter_ctl15_dyn_Field_dat_Value",input_date=date_of_from_date, edge=edge)
+    fill_date(id="pag_FW_SYS_INTF_JOB_DTL_PopupNew_grd_DynamicFilter_ctl16_dyn_Field_dat_Value",input_date=date_of_to_date, edge=edge)
+    time.sleep(2)
+    download_ar(downloads_path=downloads_path, text_of_date=text_of_date, edge=edge)
 
 def invoice_details_vs_promotion(downloads_path: str, edge) -> None:
     """
