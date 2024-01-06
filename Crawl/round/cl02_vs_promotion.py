@@ -34,3 +34,11 @@ def cl02_vs_promotion(downloads_path: str, edge) -> None:
             edge = edge
         )  
         time.sleep(2)
+        kc_total(
+            downloads_path = downloads_path, 
+            date_now = date_now, 
+            region_list = [], 
+            edge = edge
+        )
+        time.sleep(1)
+        click_button(id = "pag_RPT_Filter_btn_Back_Value", edge = edge)
