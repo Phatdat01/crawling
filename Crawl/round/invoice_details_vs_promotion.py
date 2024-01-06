@@ -67,4 +67,11 @@ def invoice_details_vs_promotion(downloads_path: str, edge) -> None:
             edge = edge
         )  
         time.sleep(1.7)
+        kc_total(
+            downloads_path = downloads_path, 
+            date_now = date_now, 
+            region_list = [], 
+            edge = edge
+        )
+        click_button(id = "pag_RPT_Filter_btn_Back_Value", edge = edge)
 
