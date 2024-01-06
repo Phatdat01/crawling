@@ -12,6 +12,75 @@ from Crawl.function.download_process import download_to_local, move_location
 from Crawl.function.fill_form import multi_check, scroll_select, filter_region, click_with_list
 from Crawl.function.fill_calendar import find_from_date_vs_to_date, fill_date, calculate_month_vs_year
 
+def fix_navigation(edge) -> None:
+    time.sleep(3)
+    try:
+        WebDriverWait(edge,50).until(
+            EC.presence_of_element_located((By.ID, "li_more_nav_ROOT_tab_Main_nav_more_li"))
+        )
+    finally:
+        child1s = edge.find_elements(By.ID,"li_more_nav_ROOT_tab_Main_nav_more_li")
+        if len(child1s)>1:
+            time.sleep(2)
+        child1s = edge.find_elements(By.ID,"li_more_nav_ROOT_tab_Main_nav_more_li")
+        for child1 in child1s:
+            child1.click()   
+
+def process_claim_section(text_value: str, downloads_path: str, date_flag: bool, edge) -> None:
+    """
+    Process 2 source on option 4
+    
+    Args:
+      id: id
+        id of element
+    downloads_path: str
+        path to take download file on local
+    date_flag: bool
+        date text calendar or scroll calendar
+
+    Returns:
+      None
+    """
+    time.sleep(2.7)
+    source_name_list = ["CL02_PROMOTION_CLAIM_FOC","CL04_CRM"]
+    date_now = datetime.now()
+    text_of_date = datetime.strftime(date_now, "%Y%m%d")
+    # click to source
+    row_no = find_index_by_text(text_value=text_value,edge=edge)
+    if row_no:
+        click_button(
+                id = f"pag_RPT_Overview_grd_ReportList_ctl{row_no}_btn_GoToReport_Value", 
+                edge = edge
+            )
+    # fill month vs year
+    if date_flag:
+        # with date field is text calendar
+        date_of_from_date, date_of_to_date = find_from_date_vs_to_date(date_now = date_now)
+        fill_date(id = "pag_RPT_Filter_grd_RPT_ctl02_Control_dat_Value",input_date = date_of_from_date, edge = edge)
+        fill_date(id = "pag_RPT_Filter_grd_RPT_ctl03_Control_dat_Value",input_date = date_of_to_date, edge = edge)
+        click_button(id="pag_RPT_Filter_grd_RPT_ctl04_Control_drp_Value_ms",edge = edge)
+        multi_check(edge)
+    else:
+        # with scroll date
+        select_month, select_year = calculate_month_vs_year(date_now = date_now)
+        time.sleep(1)
+        scroll_select(id = "pag_RPT_Filter_grd_RPT_ctl02_Control_drp_Value", select_value = select_year, edge = edge)
+        time.sleep(1)
+        scroll_select(id = "pag_RPT_Filter_grd_RPT_ctl03_Control_drp_Value", select_value = select_month, edge = edge)
+    time.sleep(1.9)
+    click_button("pag_RPT_Filter_btn_Generate_Report_Value",edge = edge)
+    # download file
+    time.sleep(1)
+    download_to_local(id = "rvrMain_ctl05_ctl04_ctl00_ButtonImg", edge = edge)
+    # move file
+    move_location(
+        downloads_path = downloads_path, 
+        text_of_date = text_of_date, 
+        source_name_list = source_name_list,
+        add_text = "",
+        region = "", 
+        edge = edge
+    )
 
 def fill_kc(region: str, downloads_path: str, date_now, add_text: str, source_name_list: List[str], edge) -> None:
     time.sleep(1.7)
@@ -248,6 +317,7 @@ def access_to_report(child_1: str, child_2: str, child_3: str, edge) -> None:
                 child_1_2.find_element(By.ID, f"{child_3}").click()
             except:
                 pass
+
 
 def access_hdr_sec(text_value: str, edge) -> None:
     """
