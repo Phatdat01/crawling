@@ -57,7 +57,7 @@ def fill_kc(region: str, downloads_path: str, date_now, add_text: str, source_na
             break
         except:
             pass
-        
+
 # For round 5
 def kc_total(downloads_path: str, date_now, region_list: List[str], edge) -> None:
     """
@@ -248,3 +248,45 @@ def access_to_report(child_1: str, child_2: str, child_3: str, edge) -> None:
                 child_1_2.find_element(By.ID, f"{child_3}").click()
             except:
                 pass
+
+def access_hdr_sec(text_value: str, edge) -> None:
+    """
+    Choose ar hdr or invoice to open
+    
+    Args:
+        id: id
+            id of hdr
+        flag: bool
+            ar or invoice
+
+    Returns:
+        None
+    """
+    time.sleep(0.7)
+    while True:
+        try:
+            time.sleep(2)
+            row_no = find_index_by_text(text_value = text_value, edge = edge)
+            if row_no:
+                click_button(
+                    id = f"pop_Dynamic_grd_Main_ctl{row_no}_DynCol_INTF_ID_Value", 
+                    edge = edge
+                )
+                break
+            else:
+                page = 2
+                while True:
+                    click_button(id=f"pop_Dynamic_grd_Main_GridListPagerList_Go_{page}", edge = edge)
+                    time.sleep(2)
+                    row_no = find_index_by_text(text_value = text_value, edge = edge)
+                    if row_no:
+                        click_button(
+                            id = f"pop_Dynamic_grd_Main_ctl{row_no}_DynCol_INTF_ID_Value", 
+                            edge = edge
+                        )
+                        break
+                    page += 1
+                break
+        except:
+            break
+    time.sleep(2)
