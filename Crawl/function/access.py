@@ -45,6 +45,18 @@ def fill_kc(region: str, downloads_path: str, date_now, add_text: str, source_na
             )
             click_button(id = "pag_RPT_Filter_btn_Generate_Report_Value", edge = edge)
             ## Download file
+            download_to_local(id = "rvrMain_ctl05_ctl04_ctl00_Button", edge = edge)
+            move_location(
+                downloads_path=downloads_path, 
+                text_of_date=text_of_date, 
+                source_name_list=source_name_list, 
+                add_text=add_text, 
+                region=region, 
+                edge=edge
+            )
+            break
+        except:
+            pass
 
 ## Open main Web
 def open_web(url: str, edge) -> None:
